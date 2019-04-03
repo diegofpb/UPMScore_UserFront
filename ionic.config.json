@@ -1,8 +1,11 @@
 {
   "name": "UPMScore",
-  "app_id": "",
+  "integrations": {},
   "type": "ionic-angular",
-  "integrations": {
-    "cordova": {}
-  }
+  "proxies": [
+    {
+      "path": "/upmscore/api",
+      "proxyUrl": "http://localhost:1111/upmscore/api"
+    }
+  ]
 }

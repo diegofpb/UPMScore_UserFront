@@ -1,0 +1,62 @@
+<!--
+  Generated template for the CreateEvaluationModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title *ngIf="previousEvaluation !== undefined">Editar Evaluación {{previousEvaluation.name}}</ion-title>
+    <ion-title *ngIf="previousEvaluation === undefined">Nueva Evaluación</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only (click)="closeModal($event)">
+        <ion-icon name="close"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="evaluationForm" (ngSubmit)="createEvaluation()">
+    <ion-item>
+      <ion-label floating>Nombre de la evaluación*</ion-label>
+      <ion-input type="text" autofocus formControlName="name"></ion-input>
+    </ion-item>
+    <div *ngIf="formErrors.name" style="padding-left: 16px;">
+      <div *ngFor="let errors of formErrors.name">
+        <p ion-text color="danger">{{ errors }}
+        <p>
+      </div>
+    </div>
+
+    <ion-item>
+      <ion-label floating>Nota mínima*</ion-label>
+      <ion-input type="number" formControlName="minimumGrade"></ion-input>
+    </ion-item>
+    <div *ngIf="formErrors.minimumGrade" style="padding-left: 16px;">
+      <div *ngFor="let errors of formErrors.minimumGrade">
+        <p ion-text color="danger">{{ errors }}
+        <p>
+      </div>
+    </div>
+
+    <ion-fab bottom right #fab1>
+      <button ion-fab type="submit"
+              arrow tooltip="Guardar" positionH="left">
+        <ion-icon name="send"></ion-icon>
+      </button>
+    </ion-fab>
+
+  </form>
+
+  <ion-fab bottom left *ngIf="previousEvaluation !== undefined">
+    <button ion-fab (click)="deleteEvaluation(previousEvaluation)"
+            color="danger"
+            arrow tooltip="Eliminar" positionH="right">
+      <ion-icon name="trash"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

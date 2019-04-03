@@ -1,0 +1,63 @@
+page-teacher-dashboard {
+
+  .main-area {
+    background-color: #F9F9F9;
+    font-family: 'Mukta', sans-serif;
+  }
+
+  .card-header-text {
+    font-family: 'Mukta', sans-serif;
+    font-size: 1.8rem;
+    padding: 1.8rem;
+    color: #222;
+    border-bottom: 3px solid #F9F9F9;
+  }
+
+  .card-top-rounded {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+  }
+
+  .subjects-text {
+    margin-left: 10px;
+    font-size: 3rem;
+    color: #222;
+    margin-top: 5px;
+  }
+
+  .next-high-priority{
+    padding-top: 2px;
+    border-bottom: 2px solid #F9F9F9;
+    border-left: 6px solid #a40707;
+  }
+
+  .next-medium-priority{
+    padding-top: 2px;
+    border-bottom: 2px solid #F9F9F9;
+    border-left: 6px solid #eb6e00;
+  }
+
+  .next-low-priority{
+    padding-top: 2px;
+    border-bottom: 2px solid #F9F9F9;
+    border-left: 6px solid #eba900;
+  }
+
+  .next-no-priority{
+    padding-top: 2px;
+    border-bottom: 2px solid #F9F9F9;
+    border-left: 6px solid #fffbf4;
+  }
+
+  .add-button {
+    padding: 8px;
+  }
+
+  .subjecticon {
+    font-size: 10rem;
+  }
+  .alerticon {
+    font-size: 4rem;
+  }
+
+}

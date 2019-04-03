@@ -1,0 +1,277 @@
+<!--
+  Generated template for the SubjectPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar no-border-top color="white">
+    <ion-buttons end>
+      <button ion-button icon-only>
+        <ion-icon name="more"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title color="black" *ngIf="subject!== undefined">Asignatura {{subject.name}}</ion-title>
+    <ion-title color="black" *ngIf="subject === undefined">Cargando...</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding class="main-area">
+  <ion-grid padding>
+
+    <ion-item>
+      <ion-label>Evaluación seleccionada:</ion-label>
+      <ion-select [(ngModel)]="selectedEvaluation" interface="popover" (ngModelChange)="getAssingmentsOfEvaluation()">
+        <ion-option *ngFor="let evaluation of evaluations">{{ evaluation.name }}</ion-option>
+        <ion-option>NUEVA EVALUACIÓN</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-card>
+      <ion-segment [(ngModel)]="appType">
+        <ion-segment-button value="Tareas">
+          Tareas
+        </ion-segment-button>
+        <ion-segment-button value="Alumnos">
+          Alumnos
+        </ion-segment-button>
+        <ion-segment-button value="Info">
+          Información
+        </ion-segment-button>
+      </ion-segment>
+    </ion-card>
+
+    <div *ngIf="appType === 'Info'">
+
+      <ion-card>
+        <ion-card-content>
+
+          <ion-list>
+
+            <ion-item-group>
+              <ion-item-divider>
+                <ion-label>Información Básica</ion-label>
+              </ion-item-divider>
+
+              <ion-item>
+                <ion-label>ID</ion-label>
+                <ion-label>{{subject.id}}</ion-label>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Nombre</ion-label>
+                <ion-label>{{subject.name}}</ion-label>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Semestre</ion-label>
+                <ion-label>{{subject.semester}}</ion-label>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>Año</ion-label>
+                <ion-label>{{subject.year}}</ion-label>
+              </ion-item>
+
+            </ion-item-group>
+
+            <ion-item-group>
+              <ion-item-divider>
+                <ion-label>Profesores</ion-label>
+              </ion-item-divider>
+
+              <ion-item *ngFor="let teacher of teachers">
+                <ion-label>{{teacher.name}} {{teacher.surname}}</ion-label>
+                <ion-label>{{teacher.email}}</ion-label>
+
+              </ion-item>
+
+            </ion-item-group>
+
+            <ion-item-group>
+              <ion-item-divider>
+                <ion-label>Asignaturas GAUSS</ion-label>
+              </ion-item-divider>
+              <ion-item *ngFor="let upmSubject of upmSubjects">
+                <ion-label>{{upmSubject.name}}</ion-label>
+                <ion-label>{{upmSubject.id.subjectId}} - {{upmSubject.id.semester}} - {{upmSubject.id.year}}</ion-label>
+              </ion-item>
+
+            </ion-item-group>
+
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+    <ion-card *ngIf="appType === 'Alumnos'">
+
+      <ion-item>
+        <ion-row>
+          <ion-col col-12 align-self-center text-left>
+            <h1 *ngIf="assingments === undefined">Alumnos</h1>
+            <h1 *ngIf="assingments !== undefined">Alumnos en evaluación {{selectedEvaluation}}</h1>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+
+      <ion-item *ngIf="students === null" style="height: 200px" text-center>
+        <ion-row style="height: 100%">
+          <ion-col align-self-center>
+            <ion-spinner class="subjecticon" name="crescent"></ion-spinner>
+            <h2>Obteniendo estudiantes...</h2>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+
+      <ion-item *ngIf="students !== null && students.length === 0" style="height: 200px" text-center>
+        <ion-row style="height: 100%">
+          <ion-col align-self-center>
+            <ion-icon class="subjecticon" name="school" color="blue-grey"></ion-icon>
+            <span>
+                <ion-icon class="alerticon" name="alert" color="blue-grey"></ion-icon>
+              </span>
+            <h2>No hay ningún estudiante matriculado en tu asignatura.</h2>
+            <p>Pide al administrador que añada estdiantes.</p>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+
+      <ion-item *ngFor="let student of students">
+        <ion-row>
+          <ion-col col-12>
+            <p>{{ student.name }}</p>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+
+    </ion-card>
+
+    <ion-card *ngIf="appType === 'Tareas'">
+
+      <ion-item>
+        <ion-row>
+          <ion-col col-12 align-self-center text-left>
+            <h1 *ngIf="assingments === undefined">Tareas</h1>
+            <h1 *ngIf="assingments !== undefined">Tareas en evaluación {{selectedEvaluation}}</h1>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+
+
+      <ion-item *ngIf="assingments === null" style="height: 200px" text-center>
+        <ion-row style="height: 100%">
+          <ion-col align-self-center>
+            <ion-spinner class="subjecticon" name="crescent"></ion-spinner>
+            <h2>Obteniendo tareas...</h2>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+
+      <ion-item *ngIf="assingments === undefined" style="height: 200px" text-center>
+        <ion-row style="height: 100%">
+          <ion-col align-self-center>
+            <ion-icon class="subjecticon" name="list" color="blue-grey"></ion-icon>
+            <span>
+                <ion-icon class="alerticon" name="close" color="blue-grey"></ion-icon>
+              </span>
+            <h2>Selecciona una evaluación válida para mostrar tus tareas.</h2>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+
+
+      <ion-item *ngIf="assingments !== null && assingments !== undefined && assingments.length === 0"
+                style="height: 200px" text-center>
+        <ion-row style="height: 100%">
+          <ion-col align-self-center>
+            <ion-icon class="subjecticon" name="list" color="blue-grey"></ion-icon>
+            <span>
+                <ion-icon class="alerticon" name="alert" color="blue-grey"></ion-icon>
+              </span>
+            <h2>No hay tareas en la evaluación {{selectedEvaluation}}.</h2>
+            <p>Crea una nueva tarea para esta evaluación.</p>
+          </ion-col>
+        </ion-row>
+
+        <ion-fab bottom right #fab1>
+          <button ion-fab mini>
+            <ion-icon name="color-wand"></ion-icon>
+          </button>
+          <ion-fab-list side="left">
+            <button ion-fab (click)="createAssingment(fab1, null)" arrow tooltip="Crear nueva tarea" positionH="left">
+              <ion-icon name="add"></ion-icon>
+            </button>
+            <button ion-fab (click)="createEvaluation(fab1, selectedEvaluation)" arrow tooltip="Editar evaluación" positionH="left">
+              <ion-icon name="options"></ion-icon>
+            </button>
+          </ion-fab-list>
+        </ion-fab>
+      </ion-item>
+
+      <ion-list *ngIf="assingments !== null && assingments !== undefined && assingments.length !== 0">
+
+        <ion-item>
+          <ion-label><b>Nombre</b></ion-label>
+          <ion-label><b>Mínima</b></ion-label>
+          <ion-label><b>Peso</b></ion-label>
+          <ion-label><b>Tipo</b></ion-label>
+          <ion-label></ion-label>
+        </ion-item>
+
+
+        <ion-item *ngFor="let assingment of assingments">
+
+          <ion-label>{{assingment.name}}</ion-label>
+          <ion-label>{{ assingment.minimumGrade }} </ion-label>
+          <ion-label>{{ assingment.weight }}/100</ion-label>
+          <ion-label *ngIf="assingment.numberOfParticipants === 1 ">Individual</ion-label>
+          <ion-label *ngIf="assingment.numberOfParticipants !== 1 ">Grupal ({{ assingment.numberOfParticipants }})</ion-label>
+          <ion-label>
+            <ion-fab middle right id="{{assingment.id}}_id" >
+              <button ion-fab mini>
+                <ion-icon name="more"></ion-icon>
+              </button>
+              <ion-fab-list side="left">
+                <button ion-fab (click)="createAssingment(null, assingment)" arrow tooltip="Opciones" positionH="left">
+                  <ion-icon name="options"></ion-icon>
+                </button>
+                <button ion-fab (click)="editMarks(assingment)" arrow tooltip="Actas" positionH="left">
+                  <ion-icon name="create"></ion-icon>
+                </button>
+              </ion-fab-list>
+            </ion-fab>
+          </ion-label>
+
+
+        </ion-item>
+
+
+
+        <ion-row style="height: 8rem;">
+          <ion-item>
+            <ion-fab bottom right #fab1>
+              <button ion-fab mini>
+                <ion-icon name="color-wand"></ion-icon>
+              </button>
+              <ion-fab-list side="left">
+                <button ion-fab (click)="createAssingment(fab1)" arrow tooltip="Crear nueva tarea" positionH="left">
+                  <ion-icon name="add"></ion-icon>
+                </button>
+                <button ion-fab (click)="createEvaluation(fab1, selectedEvaluation)" arrow tooltip="Editar evaluación" positionH="left">
+                  <ion-icon name="options"></ion-icon>
+                </button>
+              </ion-fab-list>
+            </ion-fab>
+          </ion-item>
+        </ion-row>
+
+
+      </ion-list>
+    </ion-card>
+
+
+  </ion-grid>
+</ion-content>

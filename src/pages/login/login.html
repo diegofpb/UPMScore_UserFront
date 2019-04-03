@@ -1,0 +1,67 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+
+
+<ion-content padding class="bg-style">
+  <ion-grid style="height: 100%">
+    <ion-row style="height: 100%">
+      <ion-col col-lg-6 offset-lg-3 col-md-8 offset-md-2 col-sm-10 offset-md-1 col-12 text-center align-self-center>
+        <ion-card>
+          <ion-card-title>
+            <ion-row>
+              <ion-col col-lg-4 offset-lg-4 col-md-8 offset-md-2 col-sm-10 offset-md-1 col-10 offset-1>
+                <img src="http://www.upm.es/sfs/Rectorado/Gabinete%20del%20Rector/Logos/UPM/Logotipo/LOGOTIPO%20color%20PNG.png"
+                     class="responsive-img ">
+              </ion-col>
+            </ion-row>
+            <br>
+            <h1 class="center login-form-text">Gestión de Notas</h1>
+            <p class="center login-form-text">Por favor, introduzca los datos de la cuenta UPM</p>
+          </ion-card-title>
+
+
+          <ion-card-content>
+
+            <form #loginForm="ngForm" novalidate>
+              <ion-list no-lines>
+                <ion-item>
+                  <ion-label floating color="upm-blue">Cuenta UPM</ion-label>
+                  <ion-input [(ngModel)]="login.username" name="username" type="text" #username="ngModel"
+                             spellcheck="false" autocapitalize="off"
+                             required>
+                  </ion-input>
+                </ion-item>
+                <p ion-text [hidden]="username.valid || submitted == false" color="danger" text-start padding-left>
+                  El usuario es obligatorio
+                </p>
+
+                <ion-item>
+                  <ion-label floating color="upm-blue">Contraseña</ion-label>
+                  <ion-input [(ngModel)]="login.password" name="password" type="password" #password="ngModel" required>
+                  </ion-input>
+                </ion-item>
+                <p ion-text [hidden]="password.valid || submitted == false" color="danger" text-start padding-left>
+                  La contraseña es obligatoria
+                </p>
+              </ion-list>
+
+              <ion-row responsive-sm padding>
+                <ion-col col-md-8 offset-md-2>
+                  <button ion-button (click)="onLogin(loginForm)" type="submit" block color="upm-blue">Acceder</button>
+                </ion-col>
+              </ion-row>
+
+            </form>
+
+
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
