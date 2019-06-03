@@ -5,6 +5,8 @@ import {UserDataProvider} from "../../providers/user-data/user-data";
 import {ConstantsProvider} from "../../providers/constants/constants";
 import {ApiProvider} from "../../providers/api/api";
 import {TeacherDashboardTabsPage} from "../teacher-dashboard-tabs/teacher-dashboard-tabs";
+import {StudentDashboardPage} from "../student-dashboard/student-dashboard";
+import {StudentDashboardTabsPage} from "../student-dashboard-tabs/student-dashboard-tabs";
 
 @IonicPage()
 @Component({
@@ -64,10 +66,10 @@ export class LoginPage {
           (res) => {
             if (res.authority === 'ROLE_TEACHER') {
               this.navCtrl.push(TeacherDashboardTabsPage);
-
             } else if (res.authority === 'ROLE_STUDENT') {
               toast.setMessage("El panel de estudiante no está listo aún");
               toast.present();
+              this.navCtrl.push(StudentDashboardTabsPage)
             } else {
               toast.setMessage("Su usuario no tiene privilegios necesarios");
               toast.present();

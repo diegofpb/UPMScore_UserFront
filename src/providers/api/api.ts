@@ -20,6 +20,11 @@ export class ApiProvider {
       evaluation)
   }
 
+  putPreviousEvaluationOfSubject(evaluation: any, previousEvaluationId: any): Observable<any> {
+    return this.client.putJson(this.constants.HOST + this.constants.EVALUATIONS + "/" + previousEvaluationId,
+      evaluation)
+  }
+
   postAssingmentOfEvaluation(evaluation: any): Observable<any> {
     return this.client.postJson(this.constants.HOST + this.constants.ASSINGMENTS,
       evaluation)
@@ -29,5 +34,9 @@ export class ApiProvider {
     return this.client.delete(url);
   }
 
-
+  putPreviousAssingmentOfSubject(evaluationId:any, assingment: any, previousAssingmentId: any) {
+    return this.client.putJson(this.constants.HOST + this.constants.ASSINGMENTS
+      + "/" + previousAssingmentId,
+      assingment)
+  }
 }

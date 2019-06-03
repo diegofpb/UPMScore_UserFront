@@ -35,7 +35,7 @@ export class SubjectPage {
   subject: any = undefined;
   subjectId: any = null;
 
-  students: any = null;
+  students: any = [];
   evaluations: any = null;
 
   assingments: any = null;
@@ -92,6 +92,7 @@ export class SubjectPage {
     this.api.getURL(this.constants.HOST + this.constants.SUBJECTS + "/"
       + this.subject.id + this.constants.UPM_SUBJECTS).subscribe((res) => {
       this.upmSubjects = res._embedded.uPMSubjects;
+      this.getStudentsFromUpmSubjects();
     });
 
     this.api.getURL(this.constants.HOST + this.constants.SUBJECTS + "/"
@@ -100,12 +101,20 @@ export class SubjectPage {
     });
   }
 
+  getStudentsFromUpmSubjects() {
+
+    for (let upmSubject of this.upmSubjects) {
+
+      this.api.getURL(this.constants.HOST + this.constants.UPM_SUBJECTS_EP + "/UPMSubjectPK(subjectId="
+        + upmSubject.id.subjectId + ",%20semester=" + upmSubject.id.semester + ",%20year=" +
+        upmSubject.id.year + ")"+ this.constants.STUDENTS).subscribe((res) => {
+        this.students = this.students.concat(res._embedded.students);
+      });
+    }
+  }
+
 
   getStudentsAndEvaluations() {
-    this.api.getURL(this.constants.HOST + this.constants.SUBJECTS + "/"
-      + this.subject.id + this.constants.STUDENTS).subscribe((res) => {
-      this.students = res._embedded.students;
-    });
 
     this.api.getURL(this.constants.HOST + this.constants.SUBJECTS + "/"
       + this.subject.id + this.constants.EVALUATIONS).subscribe((res) => {
@@ -221,8 +230,9 @@ export class SubjectPage {
     createModal.present();
 
     createModal.onDidDismiss((assingment) => {
-      console.log(assingment);
-      this.getStudentsAndEvaluations();
+      if(assingment !== null){
+        this.getStudentsAndEvaluations();
+      }
     })
 
   }

@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams, ToastController} from 'ionic-angular';
+import {IonicPage, NavController, NavParams, PopoverController, ToastController} from 'ionic-angular';
 import {ApiProvider} from "../../providers/api/api";
 import {UserDataProvider} from "../../providers/user-data/user-data";
 import {ConstantsProvider} from "../../providers/constants/constants";
 import {SubjectPage} from "../subject/subject";
+import {PopoverMenuPage} from "../popover-menu/popover-menu";
 
 /**
  * Generated class for the TeacherDashboardPage page.
@@ -29,6 +30,8 @@ export class TeacherDashboardPage {
               private userData: UserDataProvider,
               private constants: ConstantsProvider,
               private toastCtrl: ToastController,
+              public popoverCtrl: PopoverController,
+
   ) {
 
     this.userData.getUserForLogin().subscribe((user) => {
@@ -90,5 +93,12 @@ export class TeacherDashboardPage {
         "subjectId": asignatura.id,
         "subject": asignatura
       });
+  }
+
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(PopoverMenuPage);
+    popover.present({
+      ev: myEvent
+    });
   }
 }

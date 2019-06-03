@@ -60,6 +60,7 @@ export class CreateEvaluationModalPage {
     if (this.previousEvaluation !== undefined){
       this.evaluationForm.get("minimumGrade").setValue(this.previousEvaluation.minimumGrade);
       this.evaluationForm.get("name").setValue(this.previousEvaluation.name);
+
     }
 
 
@@ -96,8 +97,13 @@ export class CreateEvaluationModalPage {
   }
 
   createEvaluation() {
-    if (this.evaluationForm.valid) {
+    if (this.evaluationForm.valid && this.previousEvaluation == undefined) {
       this.api.postEvaluationOfSubject(this.evaluationForm.value).subscribe((value) => {
+        console.log(value);
+        this.createdEvaluation = value;
+      });
+    } else if(this.evaluationForm.valid && this.previousEvaluation !== undefined) {
+      this.api.putPreviousEvaluationOfSubject(this.evaluationForm.value, this.previousEvaluation.id).subscribe((value) => {
         console.log(value);
         this.createdEvaluation = value;
       });

@@ -6,7 +6,7 @@
 -->
 
 <ion-header>
-  <ion-navbar no-border-top color="white">
+  <ion-navbar no-border-top color="white" (click)="presentPopover($event)">
     <ion-buttons end>
       <button ion-button icon-only>
         <ion-icon name="more"></ion-icon>
@@ -19,10 +19,10 @@
 <ion-content padding class="main-area">
   <ion-grid padding>
     <ion-row>
-      <!-- First Column -->
-      <ion-col col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3>
+      <!-- First Column - NO SE USARA -->
+     <!-- <ion-col col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3>
 
-<!--
+&lt;!&ndash;
         <ion-row style="padding-bottom: 1.6rem;">
           <ion-col text-center>
             <button ion-button color="add-button" round icon-end>
@@ -31,7 +31,7 @@
             </button>
           </ion-col>
         </ion-row>
--->
+&ndash;&gt;
 
         <ion-card class="card-top-rounded">
           <ion-card-header class="card-header-text">Próximas entregas</ion-card-header>
@@ -77,8 +77,9 @@
           </ion-list>
         </ion-card>
 
-      </ion-col>
-      <ion-col col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9>
+
+      </ion-col>-->
+      <ion-col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12>
         <ion-row>
           <ion-col>
             <h1 class="subjects-text">Mis asignaturas</h1>

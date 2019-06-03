@@ -18,6 +18,8 @@ import {ConstantsProvider} from "../../providers/constants/constants";
 })
 export class CreateAssingmentModalPage {
 
+  createdAssingment: any;
+  evaluationId: any;
   assingmentForm: any = FormGroup;
   formErrors: any = {
     'minimumGrade': [],
@@ -30,16 +32,16 @@ export class CreateAssingmentModalPage {
   validationMessages: any = {
     'minimumGrade': {
       'required': 'La nota mínima de la evaluación es obligatoria.',
-      'min':'La nota mínima debe de ser mayor o igual a 1.',
-      'max':'La nota mínima debe de ser menor o igual a 10.'
+      'min': 'La nota mínima debe de ser mayor o igual a 1.',
+      'max': 'La nota mínima debe de ser menor o igual a 10.'
     },
     'name': {
       'required': 'El nombre de la evaluación es obligatorio.',
     },
     'weight': {
       'required': 'El peso de la tarea es obligatorio.',
-      'min':'El peso de esta tarea debe de ser mayor o igual a 1.',
-      'max':'El peso de esta tarea debe de ser menor o igual a 100.'
+      'min': 'El peso de esta tarea debe de ser mayor o igual a 1.',
+      'max': 'El peso de esta tarea debe de ser menor o igual a 100.'
     },
     'numberOfParticipants': {
       'required': 'El numero de participantes es obligatorio.',
@@ -55,6 +57,8 @@ export class CreateAssingmentModalPage {
               private constants: ConstantsProvider) {
 
     this.previousAssingment = navParams.get('previousAssingment');
+    this.evaluationId = navParams.get('evaluationId');
+
 
     this.assingmentForm = this.formBuilder.group({
       minimumGrade: ['', Validators.compose([Validators.required, Validators.min(1), Validators.max(10)])],
@@ -64,11 +68,11 @@ export class CreateAssingmentModalPage {
       evaluation: [this.constants.HOST + this.constants.EVALUATIONS + '/' + navParams.get('evaluationId')]
     });
 
-    if (this.previousAssingment !== undefined){
-      this.assingmentForm.get("minimumGrade").setValue(this.assingmentForm.minimumGrade);
-      this.assingmentForm.get("name").setValue(this.assingmentForm.name);
-      this.assingmentForm.get("weight").setValue(this.assingmentForm.weight);
-      this.assingmentForm.get("numberOfParticipants").setValue(this.assingmentForm.numberOfParticipants);
+    if (this.previousAssingment !== undefined) {
+      this.assingmentForm.get("minimumGrade").setValue(this.previousAssingment.minimumGrade);
+      this.assingmentForm.get("name").setValue(this.previousAssingment.name);
+      this.assingmentForm.get("weight").setValue(this.previousAssingment.weight);
+      this.assingmentForm.get("numberOfParticipants").setValue(this.previousAssingment.numberOfParticipants);
     }
 
     this.assingmentForm.valueChanges.subscribe(() => this.onValueChanged());
@@ -100,17 +104,24 @@ export class CreateAssingmentModalPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CreateAssingmentModalPage');
+    console.log(this.previousAssingment)
 
   }
 
   createAssingment() {
-    if (this.assingmentForm.valid) {
+    if (this.assingmentForm.valid && this.previousAssingment == undefined) {
       this.api.postAssingmentOfEvaluation(this.assingmentForm.value).subscribe((value) => {
         console.log(value);
       });
+    } else if (this.assingmentForm.valid && this.previousAssingment !== undefined) {
+      this.api.putPreviousAssingmentOfSubject(this.evaluationId, this.assingmentForm.value, this.previousAssingment.id).subscribe((value) => {
+        console.log(value);
+        this.createdAssingment = value;
+      });
     }
 
-    this.closeModal();
+    this.viewCtrl.dismiss(this.createdAssingment);
+
   }
 
   closeModal() {

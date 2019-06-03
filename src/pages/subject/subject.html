@@ -5,7 +5,7 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <ion-navbar no-border-top color="white">
+  <ion-navbar no-border-top color="white" (click)="presentPopover($event)">
     <ion-buttons end>
       <button ion-button icon-only>
         <ion-icon name="more"></ion-icon>
@@ -133,10 +133,22 @@
             <span>
                 <ion-icon class="alerticon" name="alert" color="blue-grey"></ion-icon>
               </span>
-            <h2>No hay ningún estudiante matriculado en tu asignatura.</h2>
-            <p>Pide al administrador que añada estdiantes.</p>
+            <h2>No hay ningún estudiante matriculado en esta modalidad.</h2>
+            <p>Añade nuevos estudiantes en esta pestaña.</p>
           </ion-col>
         </ion-row>
+
+        <ion-fab bottom right #fab1>
+          <button ion-fab mini>
+            <ion-icon name="color-wand"></ion-icon>
+          </button>
+          <ion-fab-list side="left">
+            <button ion-fab (click)="null" arrow tooltip="Añadir Alumnos via CSV" positionH="left">
+              <ion-icon name="add"></ion-icon>
+            </button>
+          </ion-fab-list>
+        </ion-fab>
+
       </ion-item>
 
       <ion-item *ngFor="let student of students">

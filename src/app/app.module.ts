@@ -23,6 +23,7 @@ import {PopoverMenuPage} from "../pages/popover-menu/popover-menu";
 import {TooltipController, TooltipsModule} from "ionic-tooltips";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {CreateAssingmentModalPage} from "../pages/create-assingment-modal/create-assingment-modal";
+import {StudentDashboardPage} from "../pages/student-dashboard/student-dashboard";
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import {CreateAssingmentModalPage} from "../pages/create-assingment-modal/create
     HomePage,
     LoginPage,
     TeacherDashboardPage,
+    StudentDashboardPage,
     TeacherDashboardTabsPage,
     SubjectPage,
     CreateEvaluationModalPage,
@@ -57,6 +59,7 @@ import {CreateAssingmentModalPage} from "../pages/create-assingment-modal/create
     HomePage,
     LoginPage,
     TeacherDashboardPage,
+    StudentDashboardPage,
     TeacherDashboardTabsPage,
     SubjectPage,
     CreateEvaluationModalPage,
