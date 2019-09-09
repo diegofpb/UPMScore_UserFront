@@ -24,6 +24,7 @@ import {TooltipController, TooltipsModule} from "ionic-tooltips";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {CreateAssingmentModalPage} from "../pages/create-assingment-modal/create-assingment-modal";
 import {StudentDashboardPage} from "../pages/student-dashboard/student-dashboard";
+import {EditStudentsModalPage} from "../pages/edit-students-modal/edit-students-modal";
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import {StudentDashboardPage} from "../pages/student-dashboard/student-dashboard
     SubjectPage,
     CreateEvaluationModalPage,
     CreateAssingmentModalPage,
+    EditStudentsModalPage,
     PopoverMenuPage
   ],
   imports: [
@@ -64,6 +66,7 @@ import {StudentDashboardPage} from "../pages/student-dashboard/student-dashboard
     SubjectPage,
     CreateEvaluationModalPage,
     CreateAssingmentModalPage,
+    EditStudentsModalPage,
     PopoverMenuPage
 
   ],

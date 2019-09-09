@@ -20,6 +20,7 @@ export class ApiProvider {
       evaluation)
   }
 
+
   putPreviousEvaluationOfSubject(evaluation: any, previousEvaluationId: any): Observable<any> {
     return this.client.putJson(this.constants.HOST + this.constants.EVALUATIONS + "/" + previousEvaluationId,
       evaluation)
@@ -34,9 +35,17 @@ export class ApiProvider {
     return this.client.delete(url);
   }
 
-  putPreviousAssingmentOfSubject(evaluationId:any, assingment: any, previousAssingmentId: any) {
+  putPreviousAssingmentOfSubject(evaluationId: any, assingment: any, previousAssingmentId: any) {
     return this.client.putJson(this.constants.HOST + this.constants.ASSINGMENTS
       + "/" + previousAssingmentId,
       assingment)
+  }
+
+  uploadMultiPartFile(file: any, subjectId: String, upmSubjectPK: String): Observable<any> {
+    let formData: FormData = new FormData();
+    formData.append('csvFile', file, file.name);
+
+    return this.client.postMultiPart(this.constants.HOST + this.constants.SUBJECTS
+    + "/create/" + subjectId + "/csv/" + upmSubjectPK, formData);
   }
 }

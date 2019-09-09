@@ -28,8 +28,4 @@ export class HttpClientProvider {
     return this.http.post(url, body);
   }
 
-
-  // TODO implementar el resto de verbos.
-
-
 }

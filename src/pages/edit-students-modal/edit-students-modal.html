@@ -1,0 +1,75 @@
+<!--
+  Generated template for the EditStudentsModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Añadir/Editar Estudiantes</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <div *ngIf="subject.apoloFile !== null">
+    <!--CSV Info-->
+    <ion-item>
+      <ion-row>
+        <ion-col col-1 style="align-self: center;">
+          <p><b>CSV</b></p>
+        </ion-col>
+        <ion-col col-11>
+          <h2>{{ subject.apoloFile }}</h2>
+          <p>Modificado: {{subject.modifiedDate}}</p>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+    <!--Student List-->
+    <ion-list>
+
+      <ion-list-header>
+        <ion-label>Alumnos</ion-label>
+      </ion-list-header>
+
+      <ion-item class="item item-block item-ios">
+        <ion-avatar item-start="">
+          <img src="https://ionicframework.com/docs/v3/dist/preview-app/www/assets/img/avatar-ts-woody.png">
+        </ion-avatar>
+        <h2>Woody</h2>
+        <h3>This town ain't big enough for the two of us!</h3>
+      </ion-item>
+
+    </ion-list>
+  </div>
+
+  <div *ngIf="subject.apoloFile === null">
+    <h3>Importa aquí el fichero CSV obtenido desde Politécnica Virtual.</h3>
+
+    <ion-row padding>
+      <ion-col>
+        <label padding-right class="label-floor">CSV</label>
+        <input type="file" (change)="onChangeFile($event.target)"
+               name="csvFile" id="csvFile" class="input-file" accept=".csv">
+        <label for="csvFile">
+          <div ion-button>
+            <ion-icon name="cloud-upload" padding-right></ion-icon>
+            {{apoloFileName}}
+          </div>
+        </label>
+      </ion-col>
+    </ion-row>
+
+    <ion-fab bottom right #fab1>
+      <button id="uploadButton" ion-fab type="submit"
+              arrow tooltip="Guardar" positionH="left" (click)="uploadCSV()">
+        <ion-icon name="send"></ion-icon>
+      </button>
+    </ion-fab>
+
+  </div>
+
+
+</ion-content>

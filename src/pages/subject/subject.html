@@ -20,21 +20,10 @@
 <ion-content padding class="main-area">
   <ion-grid padding>
 
-    <ion-item>
-      <ion-label>Evaluación seleccionada:</ion-label>
-      <ion-select [(ngModel)]="selectedEvaluation" interface="popover" (ngModelChange)="getAssingmentsOfEvaluation()">
-        <ion-option *ngFor="let evaluation of evaluations">{{ evaluation.name }}</ion-option>
-        <ion-option>NUEVA EVALUACIÓN</ion-option>
-      </ion-select>
-    </ion-item>
-
     <ion-card>
       <ion-segment [(ngModel)]="appType">
-        <ion-segment-button value="Tareas">
-          Tareas
-        </ion-segment-button>
-        <ion-segment-button value="Alumnos">
-          Alumnos
+        <ion-segment-button value="Evaluaciones">
+          Evaluaciones
         </ion-segment-button>
         <ion-segment-button value="Info">
           Información
@@ -45,6 +34,17 @@
     <div *ngIf="appType === 'Info'">
 
       <ion-card>
+        <ion-segment [(ngModel)]="infoType">
+          <ion-segment-button value="Asignatura">
+            Asignatura
+          </ion-segment-button>
+          <ion-segment-button value="Alumnos">
+            Alumnos
+          </ion-segment-button>
+        </ion-segment>
+      </ion-card>
+
+      <ion-card *ngIf="infoType === 'Asignatura'">
         <ion-card-content>
 
           <ion-list>
@@ -104,64 +104,55 @@
         </ion-card-content>
       </ion-card>
 
+      <ion-card *ngIf="infoType === 'Alumnos'">
+        <ion-card-content>
+
+          <div *ngFor="let key of upmKeys">
+
+            <div *ngIf="upmSubjectMap.get(key).length !== 0">
+              <ion-list-header>{{key.name}}</ion-list-header>
+              <ion-item class="item item-block item-ios" *ngFor="let alumno of upmSubjectMap.get(key)">
+                <ion-avatar item-start="">
+                  <img src="http://trackwalkins.com/wp-content/uploads/2019/02/default-profile-picture.jpg">
+                </ion-avatar>
+                <h2>{{alumno.name}} {{alumno.surname}}</h2>
+                <h3>{{alumno.email}}</h3>
+                <h3 *ngIf="students_evaluations.get(alumno) === null">SIN EVALUACION ESTABLECIDA</h3>
+                <h3 *ngIf="students_evaluations.get(alumno) !== null">{{students_evaluations.get(alumno)}}</h3>
+                <button item-end="" ion-button outline (click)="editEvaluacion(alumno)">Cambiar Evaluación</button>
+              </ion-item>
+            </div>
+
+            <div *ngIf="upmSubjectMap.get(key).length === 0">
+              <ion-list-header>{{key.name}}</ion-list-header>
+
+              <button ion-button icon-start block outline (click)="addStudents(key,this.subjectId)">
+                <ion-icon name="md-person-add"></ion-icon>
+                Añadir alumnos
+              </button>
+
+            </div>
+
+
+          </div>
+
+
+        </ion-card-content>
+      </ion-card>
+
+
     </div>
 
-    <ion-card *ngIf="appType === 'Alumnos'">
+
+    <ion-card *ngIf="appType === 'Evaluaciones'">
 
       <ion-item>
-        <ion-row>
-          <ion-col col-12 align-self-center text-left>
-            <h1 *ngIf="assingments === undefined">Alumnos</h1>
-            <h1 *ngIf="assingments !== undefined">Alumnos en evaluación {{selectedEvaluation}}</h1>
-          </ion-col>
-        </ion-row>
+        <ion-label>Evaluación seleccionada:</ion-label>
+        <ion-select [(ngModel)]="selectedEvaluation" interface="popover" (ngModelChange)="getAssingmentsOfEvaluation()">
+          <ion-option *ngFor="let evaluation of evaluations">{{ evaluation.name }}</ion-option>
+          <ion-option>NUEVA EVALUACIÓN</ion-option>
+        </ion-select>
       </ion-item>
-
-      <ion-item *ngIf="students === null" style="height: 200px" text-center>
-        <ion-row style="height: 100%">
-          <ion-col align-self-center>
-            <ion-spinner class="subjecticon" name="crescent"></ion-spinner>
-            <h2>Obteniendo estudiantes...</h2>
-          </ion-col>
-        </ion-row>
-      </ion-item>
-
-      <ion-item *ngIf="students !== null && students.length === 0" style="height: 200px" text-center>
-        <ion-row style="height: 100%">
-          <ion-col align-self-center>
-            <ion-icon class="subjecticon" name="school" color="blue-grey"></ion-icon>
-            <span>
-                <ion-icon class="alerticon" name="alert" color="blue-grey"></ion-icon>
-              </span>
-            <h2>No hay ningún estudiante matriculado en esta modalidad.</h2>
-            <p>Añade nuevos estudiantes en esta pestaña.</p>
-          </ion-col>
-        </ion-row>
-
-        <ion-fab bottom right #fab1>
-          <button ion-fab mini>
-            <ion-icon name="color-wand"></ion-icon>
-          </button>
-          <ion-fab-list side="left">
-            <button ion-fab (click)="null" arrow tooltip="Añadir Alumnos via CSV" positionH="left">
-              <ion-icon name="add"></ion-icon>
-            </button>
-          </ion-fab-list>
-        </ion-fab>
-
-      </ion-item>
-
-      <ion-item *ngFor="let student of students">
-        <ion-row>
-          <ion-col col-12>
-            <p>{{ student.name }}</p>
-          </ion-col>
-        </ion-row>
-      </ion-item>
-
-    </ion-card>
-
-    <ion-card *ngIf="appType === 'Tareas'">
 
       <ion-item>
         <ion-row>
@@ -216,7 +207,8 @@
             <button ion-fab (click)="createAssingment(fab1, null)" arrow tooltip="Crear nueva tarea" positionH="left">
               <ion-icon name="add"></ion-icon>
             </button>
-            <button ion-fab (click)="createEvaluation(fab1, selectedEvaluation)" arrow tooltip="Editar evaluación" positionH="left">
+            <button ion-fab (click)="createEvaluation(fab1, selectedEvaluation)" arrow tooltip="Editar evaluación"
+                    positionH="left">
               <ion-icon name="options"></ion-icon>
             </button>
           </ion-fab-list>
@@ -240,9 +232,10 @@
           <ion-label>{{ assingment.minimumGrade }} </ion-label>
           <ion-label>{{ assingment.weight }}/100</ion-label>
           <ion-label *ngIf="assingment.numberOfParticipants === 1 ">Individual</ion-label>
-          <ion-label *ngIf="assingment.numberOfParticipants !== 1 ">Grupal ({{ assingment.numberOfParticipants }})</ion-label>
+          <ion-label *ngIf="assingment.numberOfParticipants !== 1 ">Grupal ({{ assingment.numberOfParticipants }})
+          </ion-label>
           <ion-label>
-            <ion-fab middle right id="{{assingment.id}}_id" >
+            <ion-fab middle right id="{{assingment.id}}_id">
               <button ion-fab mini>
                 <ion-icon name="more"></ion-icon>
               </button>
@@ -261,7 +254,6 @@
         </ion-item>
 
 
-
         <ion-row style="height: 8rem;">
           <ion-item>
             <ion-fab bottom right #fab1>
@@ -272,7 +264,8 @@
                 <button ion-fab (click)="createAssingment(fab1)" arrow tooltip="Crear nueva tarea" positionH="left">
                   <ion-icon name="add"></ion-icon>
                 </button>
-                <button ion-fab (click)="createEvaluation(fab1, selectedEvaluation)" arrow tooltip="Editar evaluación" positionH="left">
+                <button ion-fab (click)="createEvaluation(fab1, selectedEvaluation)" arrow tooltip="Editar evaluación"
+                        positionH="left">
                   <ion-icon name="options"></ion-icon>
                 </button>
               </ion-fab-list>

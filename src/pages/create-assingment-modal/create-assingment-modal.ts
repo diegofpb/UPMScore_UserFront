@@ -68,7 +68,7 @@ export class CreateAssingmentModalPage {
       evaluation: [this.constants.HOST + this.constants.EVALUATIONS + '/' + navParams.get('evaluationId')]
     });
 
-    if (this.previousAssingment !== undefined) {
+    if (this.previousAssingment !== null && this.previousAssingment !== undefined) {
       this.assingmentForm.get("minimumGrade").setValue(this.previousAssingment.minimumGrade);
       this.assingmentForm.get("name").setValue(this.previousAssingment.name);
       this.assingmentForm.get("weight").setValue(this.previousAssingment.weight);

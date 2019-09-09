@@ -2,7 +2,8 @@ import {Component} from '@angular/core';
 import {
   FabContainer,
   IonicPage,
-  ModalController, ModalOptions,
+  ModalController,
+  ModalOptions,
   NavController,
   NavParams,
   PopoverController,
@@ -13,6 +14,7 @@ import {ConstantsProvider} from "../../providers/constants/constants";
 import {PopoverMenuPage} from "../popover-menu/popover-menu";
 import {CreateEvaluationModalPage} from "../create-evaluation-modal/create-evaluation-modal";
 import {CreateAssingmentModalPage} from "../create-assingment-modal/create-assingment-modal";
+import {EditStudentsModalPage} from "../edit-students-modal/edit-students-modal";
 
 /**
  * Generated class for the SubjectPage page.
@@ -28,8 +30,16 @@ import {CreateAssingmentModalPage} from "../create-assingment-modal/create-assin
 })
 export class SubjectPage {
 
-  appType = 'Tareas';
+  upmSubjectMap = new Map();
+
+  upmKeys = [];
+
+
+  appType = 'Evaluaciones';
+  infoType = 'Asignatura';
+
   selectedEvaluation;
+  evaluationInfo: any;
 
 
   subject: any = undefined;
@@ -42,6 +52,8 @@ export class SubjectPage {
 
   upmSubjects: any = null;
   teachers: any = null;
+
+  students_evaluations = new Map();
 
 
   constructor(public navCtrl: NavController,
@@ -74,7 +86,9 @@ export class SubjectPage {
 
     }
 
+
   }
+
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SubjectPage');
@@ -92,6 +106,7 @@ export class SubjectPage {
     this.api.getURL(this.constants.HOST + this.constants.SUBJECTS + "/"
       + this.subject.id + this.constants.UPM_SUBJECTS).subscribe((res) => {
       this.upmSubjects = res._embedded.uPMSubjects;
+      console.log(this.upmSubjects);
       this.getStudentsFromUpmSubjects();
     });
 
@@ -101,16 +116,30 @@ export class SubjectPage {
     });
   }
 
+
   getStudentsFromUpmSubjects() {
+
+    this.students = [];
+    this.upmSubjectMap.clear();
+    this.upmKeys = [];
 
     for (let upmSubject of this.upmSubjects) {
 
       this.api.getURL(this.constants.HOST + this.constants.UPM_SUBJECTS_EP + "/UPMSubjectPK(subjectId="
         + upmSubject.id.subjectId + ",%20semester=" + upmSubject.id.semester + ",%20year=" +
-        upmSubject.id.year + ")"+ this.constants.STUDENTS).subscribe((res) => {
+        upmSubject.id.year + ")" + this.constants.STUDENTS + "?sort=surname,asc").subscribe((res) => {
         this.students = this.students.concat(res._embedded.students);
+
+        this.upmSubjectMap.set(upmSubject, res._embedded.students);
+        this.upmKeys.push(upmSubject);
+
+        for (let student of res._embedded.students) {
+          this.students_evaluations.set(student, null);
+        }
       });
     }
+
+    console.log(this.students_evaluations);
   }
 
 
@@ -123,6 +152,23 @@ export class SubjectPage {
       if (this.evaluations !== null && this.evaluations.length !== 0) {
         this.selectedEvaluation = this.evaluations[0].name;
         this.getAssingmentsOfEvaluation(this.evaluations[0]);
+
+        for (let ev of this.evaluations) {
+          this.api.getURL(this.constants.HOST + this.constants.EVALUATIONS + "/"
+            + ev.id + this.constants.STUDENTS).subscribe((res) => {
+            console.log(res._embedded.students);
+
+            for (let student of res._embedded.students) {
+              if (this.students_evaluations.has(student)) {
+                this.students_evaluations.delete(student);
+                this.students_evaluations.set(student, ev)
+              }
+            }
+
+          });
+        }
+
+
       }
 
       if (this.evaluations !== null && this.evaluations.length === 0) {
@@ -198,6 +244,13 @@ export class SubjectPage {
     } else {
       console.log("HAS ESCOGIDO UNA ASIGNATURA DEL SELECTOR.");
       console.log(this.selectedEvaluation);
+
+      this.api.getURL(this.constants.HOST + this.constants.EVALUATIONS + "/"
+        + evaluationToFind.id).subscribe((res) => {
+        console.log(res);
+        this.evaluationInfo = res;
+      });
+
       this.api.getURL(this.constants.HOST + this.constants.EVALUATIONS + "/"
         + evaluationToFind.id + this.constants.ASSINGMENTS).subscribe((res) => {
         console.log("AQUI TIENE SUS TAREAS");
@@ -230,7 +283,7 @@ export class SubjectPage {
     createModal.present();
 
     createModal.onDidDismiss((assingment) => {
-      if(assingment !== null){
+      if (assingment !== null) {
         this.getStudentsAndEvaluations();
       }
     })
@@ -240,4 +293,42 @@ export class SubjectPage {
   editMarks(assingment: any) {
 
   }
+
+
+  editEvaluacion(alumno: any, evaluacion: any) {
+
+  }
+
+  addStudents(key: any, subjectId: any) {
+
+    const createModalOptions: ModalOptions = {
+      enableBackdropDismiss: true
+    };
+
+    const createModal =
+      this.modalCtrl.create(EditStudentsModalPage, {subject: key, subjectId: subjectId}, createModalOptions);
+
+    createModal.present();
+
+    createModal.onDidDismiss(() => {
+      this.getStudentsAndEvaluations();
+      this.getStudentsFromUpmSubjects();
+    })
+
+
+  }
+
+  getEvaluationsOfStudents() {
+
+
+  }
+
+
+}
+
+export class UPMSubjectInfo {
+
+  name: String;
+  students: any = [];
+
 }

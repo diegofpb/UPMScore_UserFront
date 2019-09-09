@@ -1,0 +1,26 @@
+page-edit-students-modal {
+
+
+  .input-file {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .input-file + label {
+    cursor: pointer;
+  }
+
+  .label-floor {
+    font-size: 1.6rem;
+    font-weight: normal;
+    text-transform: none;
+    color: #999;
+    margin-left: -5px;
+  }
+
+
+}
